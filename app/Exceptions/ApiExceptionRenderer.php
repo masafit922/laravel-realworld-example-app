@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -70,6 +71,14 @@ class ApiExceptionRenderer
             }, $validationErrors);
 
             return response()->json(['errors' => $validationErrors], 422);
+        }
+
+        /*
+         * Since Laravel 6 the message also contains the requested route key,
+         * keep the original message without echoing user input back.
+         */
+        if ($exception->getPrevious() instanceof ModelNotFoundException) {
+            $message = sprintf('No query results for model [%s].', $exception->getPrevious()->getModel());
         }
 
         /*
