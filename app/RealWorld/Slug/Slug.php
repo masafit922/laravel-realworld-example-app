@@ -3,6 +3,7 @@
 namespace App\RealWorld\Slug;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Slug
 {
@@ -51,7 +52,7 @@ class Slug
      */
     public function generate()
     {
-        $slug = str_slug($this->initialValue, static::SEPARATOR);
+        $slug = Str::slug($this->initialValue, static::SEPARATOR);
 
         $notAllowed = $this->getSimilarSlugs($slug)->merge($this->banned);
 

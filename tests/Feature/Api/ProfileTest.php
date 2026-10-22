@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class ProfileTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_a_valid_profile()
     {
         $response = $this->getJson("/api/profiles/{$this->user->username}");
@@ -25,7 +26,7 @@ class ProfileTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_not_found_error_on_invalid_profile()
     {
         $response = $this->getJson('/api/profiles/somerandomusername');
@@ -33,7 +34,7 @@ class ProfileTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_profile_following_property_accordingly_when_followed_and_unfollowed()
     {
         $response = $this->postJson("/api/profiles/{$this->user->username}/follow", [], $this->headers);
@@ -65,7 +66,7 @@ class ProfileTest extends TestCase
         $this->assertFalse($this->loggedInUser->isFollowing($this->user), 'Failed to unfollow user');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_not_found_error_when_trying_to_follow_and_unfollow_an_invalid_user()
     {
         $response = $this->postJson("/api/profiles/somerandomusername/follow", [], $this->headers);
@@ -77,7 +78,7 @@ class ProfileTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_follow_or_unfollow_without_logging_in()
     {
         $response = $this->postJson("/api/profiles/{$this->user->username}/follow");

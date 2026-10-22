@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DummyDataSeeder extends Seeder
@@ -69,16 +71,16 @@ class DummyDataSeeder extends Seeder
      */
     public function run(\Faker\Generator $faker)
     {
-        $users = factory(\App\User::class)->times($this->totalUsers)->create();
+        $users = \App\User::factory()->count($this->totalUsers)->create();
 
-        $tags = factory(\App\Tag::class)->times($this->totalTags)->create();
+        $tags = \App\Tag::factory()->count($this->totalTags)->create();
 
         $users->random((int) $this->totalUsers * $this->userWithArticleRatio)
             ->each(function ($user) use ($faker, $tags) {
                 $user->articles()
                     ->saveMany(
-                        factory(\App\Article::class)
-                        ->times($faker->numberBetween(1, $this->maxArticlesByUser))
+                        \App\Article::factory()
+                        ->count($faker->numberBetween(1, $this->maxArticlesByUser))
                         ->make()
                     )
                     ->each(function ($article) use ($faker, $tags) {
@@ -89,8 +91,8 @@ class DummyDataSeeder extends Seeder
                     ->each(function ($article) use ($faker) {
                         $article->comments()
                             ->saveMany(
-                                factory(\App\Comment::class)
-                                ->times($faker->numberBetween(1, $this->maxCommentsInArticle))
+                                \App\Comment::factory()
+                                ->count($faker->numberBetween(1, $this->maxCommentsInArticle))
                                 ->make()
                             );
                     });

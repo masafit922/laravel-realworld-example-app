@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class ArticleReadTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_articles_when_no_articles_exist()
     {
         $response = $this->getJson('/api/articles');
@@ -21,10 +22,10 @@ class ArticleReadTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_articles_and_correct_total_article_count()
     {
-        $articles = $this->user->articles()->saveMany(factory(\App\Article::class)->times(2)->make());
+        $articles = $this->user->articles()->saveMany(\App\Article::factory()->count(2)->make());
 
         $response = $this->getJson('/api/articles');
 
@@ -57,10 +58,10 @@ class ArticleReadTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_article_by_slug_if_valid_and_not_found_error_if_invalid()
     {
-        $article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->user->articles()->save(\App\Article::factory()->make());
 
         $response = $this->getJson("/api/articles/{$article->slug}");
 
@@ -90,10 +91,10 @@ class ArticleReadTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_following_and_favorited_fields_when_logged_in()
     {
-        $article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->user->articles()->save(\App\Article::factory()->make());
 
         $this->loggedInUser->follow($this->user);
 

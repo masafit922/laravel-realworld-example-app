@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class ArticleCreateTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_the_article_on_successfully_creating_a_new_article()
     {
         $data = [
@@ -58,7 +59,7 @@ class ArticleCreateTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_appropriate_field_validation_errors_when_creating_a_new_article_with_invalid_inputs()
     {
         $data = [
@@ -91,7 +92,7 @@ class ArticleCreateTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_add_article_without_logging_in()
     {
         $response = $this->postJson('/api/articles', []);

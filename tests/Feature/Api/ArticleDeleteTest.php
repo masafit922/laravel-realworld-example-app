@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,10 +10,10 @@ class ArticleDeleteTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_a_200_success_response_on_successfully_removing_the_article()
     {
-        $article = $this->loggedInUser->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->loggedInUser->articles()->save(\App\Article::factory()->make());
 
         $response = $this->deleteJson("/api/articles/{$article->slug}", [], $this->headers);
 
@@ -23,20 +24,20 @@ class ArticleDeleteTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_remove_article_without_logging_in()
     {
-        $article = $this->loggedInUser->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->loggedInUser->articles()->save(\App\Article::factory()->make());
 
         $response = $this->deleteJson("/api/articles/{$article->slug}");
 
         $response->assertStatus(401);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_forbidden_error_when_trying_to_remove_articles_by_others()
     {
-        $article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->user->articles()->save(\App\Article::factory()->make());
 
         $response = $this->deleteJson("/api/articles/{$article->slug}", [], $this->headers);
 

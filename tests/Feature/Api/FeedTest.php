@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class FeedTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_articles_when_user_does_not_follow_anyone()
     {
         $response = $this->getJson('/api/articles/feed', $this->headers);
@@ -21,10 +22,10 @@ class FeedTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_articles_of_users_followed_by_the_logged_in_user()
     {
-        $articles = $this->user->articles()->saveMany(factory(\App\Article::class)->times(2)->make());
+        $articles = $this->user->articles()->saveMany(\App\Article::factory()->count(2)->make());
 
         $this->loggedInUser->follow($this->user);
 
@@ -59,10 +60,10 @@ class FeedTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_feed_articles_with_limit_and_offset()
     {
-        $this->user->articles()->saveMany(factory(\App\Article::class)->times(25)->make());
+        $this->user->articles()->saveMany(\App\Article::factory()->count(25)->make());
 
         $this->loggedInUser->follow($this->user);
 
@@ -97,10 +98,10 @@ class FeedTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_feed_articles_with_appropriate_favorite_and_following_fields()
     {
-        $article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->user->articles()->save(\App\Article::factory()->make());
 
         $this->loggedInUser->follow($this->user);
 
@@ -141,7 +142,7 @@ class FeedTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_get_feed_without_logging_in()
     {
         $response = $this->getJson('/api/articles/feed');
