@@ -1,44 +1,49 @@
 <?php
 
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\FeedController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| These routes are loaded with the "api" prefix and middleware group
+| (see bootstrap/app.php).
 |
 */
 
-Route::group(['namespace' => 'Api'], function () {
+Route::post('users/login', [AuthController::class, 'login']);
+Route::post('users', [AuthController::class, 'register']);
 
-    Route::post('users/login', 'AuthController@login');
-    Route::post('users', 'AuthController@register');
+Route::get('user', [UserController::class, 'index']);
+Route::match(['put', 'patch'], 'user', [UserController::class, 'update']);
 
-    Route::get('user', 'UserController@index');
-    Route::match(['put', 'patch'], 'user', 'UserController@update');
+Route::get('profiles/{user}', [ProfileController::class, 'show']);
+Route::post('profiles/{user}/follow', [ProfileController::class, 'follow']);
+Route::delete('profiles/{user}/follow', [ProfileController::class, 'unFollow']);
 
-    Route::get('profiles/{user}', 'ProfileController@show');
-    Route::post('profiles/{user}/follow', 'ProfileController@follow');
-    Route::delete('profiles/{user}/follow', 'ProfileController@unFollow');
+Route::get('articles/feed', [FeedController::class, 'index']);
+Route::post('articles/{article}/favorite', [FavoriteController::class, 'add']);
+Route::delete('articles/{article}/favorite', [FavoriteController::class, 'remove']);
 
-    Route::get('articles/feed', 'FeedController@index');
-    Route::post('articles/{article}/favorite', 'FavoriteController@add');
-    Route::delete('articles/{article}/favorite', 'FavoriteController@remove');
+Route::resource('articles', ArticleController::class, [
+    'except' => [
+        'create', 'edit'
+    ]
+]);
 
-    Route::resource('articles', 'ArticleController', [
-        'except' => [
-            'create', 'edit'
-        ]
-    ]);
+Route::resource('articles/{article}/comments', CommentController::class, [
+    'only' => [
+        'index', 'store', 'destroy'
+    ]
+]);
 
-    Route::resource('articles/{article}/comments', 'CommentController', [
-        'only' => [
-            'index', 'store', 'destroy'
-        ]
-    ]);
-
-    Route::get('tags', 'TagController@index');
-
-});
+Route::get('tags', [TagController::class, 'index']);

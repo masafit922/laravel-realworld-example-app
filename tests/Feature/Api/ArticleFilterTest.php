@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class ArticleFilterTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_articles_when_no_articles_exist_with_the_tag_or_an_invalid_tag()
     {
         $response = $this->getJson('/api/articles?tag=test');
@@ -29,18 +30,18 @@ class ArticleFilterTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_articles_with_the_tag_along_with_correct_total_article_count()
     {
-        $tags = factory(\App\Tag::class)->times(2)->create();
+        $tags = \App\Tag::factory()->count(2)->create();
 
         $articles = $this->user->articles()
-            ->saveMany(factory(\App\Article::class)->times(3)->make())
+            ->saveMany(\App\Article::factory()->count(3)->make())
             ->each(function ($article) use ($tags) {
                 $article->tags()->attach($tags);
             });
 
-        $this->user->articles()->saveMany(factory(\App\Article::class)->times(5)->make());
+        $this->user->articles()->saveMany(\App\Article::factory()->count(5)->make());
 
         $response = $this->getJson("/api/articles?tag={$tags[0]->name}");
 
@@ -67,7 +68,7 @@ class ArticleFilterTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_articles_when_no_articles_exist_by_the_author_or_invalid_author()
     {
         $response = $this->getJson('/api/articles?author=test');
@@ -87,11 +88,11 @@ class ArticleFilterTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_articles_by_the_author_along_with_correct_total_article_count()
     {
-        $articles = $this->user->articles()->saveMany(factory(\App\Article::class)->times(3)->make());
-        $this->loggedInUser->articles()->saveMany(factory(\App\Article::class)->times(5)->make());
+        $articles = $this->user->articles()->saveMany(\App\Article::factory()->count(3)->make());
+        $this->loggedInUser->articles()->saveMany(\App\Article::factory()->count(5)->make());
 
         $response = $this->getJson("/api/articles?author={$this->user->username}");
 
@@ -124,7 +125,7 @@ class ArticleFilterTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_articles_when_no_favorited_articles_exist_for_a_user_or_invalid_user()
     {
         $response = $this->getJson("/api/articles?favorited={$this->user->username}");
@@ -144,10 +145,10 @@ class ArticleFilterTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_articles_favorited_by_the_user_along_with_correct_total_article_count()
     {
-        $articles = $this->loggedInUser->articles()->saveMany(factory(\App\Article::class)->times(5)->make());
+        $articles = $this->loggedInUser->articles()->saveMany(\App\Article::factory()->count(5)->make());
         $this->user->favorite($articles[0]);
         $this->user->favorite($articles[2]);
         $this->user->favorite($articles[4]);

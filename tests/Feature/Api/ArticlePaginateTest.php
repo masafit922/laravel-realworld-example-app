@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,10 +10,10 @@ class ArticlePaginateTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_articles_with_limit_and_offset()
     {
-        $this->user->articles()->saveMany(factory(\App\Article::class)->times(25)->make());
+        $this->user->articles()->saveMany(\App\Article::factory()->count(25)->make());
 
         $response = $this->getJson('/api/articles');
 

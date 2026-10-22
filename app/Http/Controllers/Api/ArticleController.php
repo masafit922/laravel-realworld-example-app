@@ -90,7 +90,7 @@ class ArticleController extends ApiController
     public function update(UpdateArticle $request, Article $article)
     {
         if ($request->has('article')) {
-            $article->update($request->get('article'));
+            $article->update($request->input('article'));
         }
 
         return $this->respondWithTransformer($article);

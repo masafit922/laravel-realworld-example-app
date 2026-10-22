@@ -29,9 +29,9 @@ class Paginate
      */
     public function __construct(Builder $builder, $limit = 20, $offset = 0)
     {
-        $limit = request()->get('limit', $limit);
+        $limit = request()->input('limit', $limit);
 
-        $offset = request()->get('offset', $offset);
+        $offset = request()->input('offset', $offset);
 
         $this->total = $builder->count();
 

@@ -14,11 +14,11 @@ abstract class TestCase extends BaseTestCase
 
     protected $headers;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $users = factory(\App\User::class)->times(2)->create();
+        $users = \App\User::factory()->count(2)->create();
 
         $this->loggedInUser = $users[0];
 

@@ -9,9 +9,9 @@ class UpdateArticle extends ApiRequest
      *
      * @return array
      */
-    protected function validationData()
+    public function validationData()
     {
-        return $this->get('article') ?: [];
+        return $this->input('article') ?: [];
     }
 
     /**

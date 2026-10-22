@@ -1,22 +1,21 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
+  - 8.3
 
 before_script:
   - cp .env.travis .env
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+  - composer install --prefer-dist --no-interaction
   - php artisan key:generate
-  - php artisan jwt:secret
+  - php artisan jwt:secret --force
   - php artisan migrate
 
 before_install:
   - mysql -e 'CREATE DATABASE realworld_test;'
 
 script:
-  - phpunit
+  - vendor/bin/phpunit
 
 services:
   - mysql

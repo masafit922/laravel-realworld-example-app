@@ -40,7 +40,7 @@ class UserController extends ApiController
         $user = auth()->user();
 
         if ($request->has('user')) {
-            $user->update($request->get('user'));
+            $user->update($request->input('user'));
         }
 
         return $this->respondWithTransformer($user);

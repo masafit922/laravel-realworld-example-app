@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,10 +10,10 @@ class ArticleUpdateTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_the_updated_article_on_successfully_updating_the_article()
     {
-        $article = $this->loggedInUser->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->loggedInUser->articles()->save(\App\Article::factory()->make());
 
         $data = [
             'article' => [
@@ -35,10 +36,10 @@ class ArticleUpdateTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_appropriate_field_validation_errors_when_updating_the_article_with_invalid_inputs()
     {
-        $article = $this->loggedInUser->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->loggedInUser->articles()->save(\App\Article::factory()->make());
 
         $data = [
             'article' => [
@@ -60,10 +61,10 @@ class ArticleUpdateTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_update_article_without_logging_in()
     {
-        $article = $this->loggedInUser->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->loggedInUser->articles()->save(\App\Article::factory()->make());
 
         $data = [
             'article' => [
@@ -78,10 +79,10 @@ class ArticleUpdateTest extends TestCase
         $response->assertStatus(401);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_forbidden_error_when_trying_to_update_articles_by_others()
     {
-        $article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $article = $this->user->articles()->save(\App\Article::factory()->make());
 
         $data = [
             'article' => [

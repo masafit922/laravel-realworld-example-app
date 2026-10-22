@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class LoginTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_a_user_with_valid_token_on_valid_login()
     {
         $data = [
@@ -39,7 +40,7 @@ class LoginTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_field_required_validation_errors_on_invalid_login()
     {
         $data = [];
@@ -55,7 +56,7 @@ class LoginTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_appropriate_field_validation_errors_on_invalid_login()
     {
         $data = [

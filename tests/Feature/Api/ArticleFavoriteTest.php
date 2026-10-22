@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -11,14 +12,14 @@ class ArticleFavoriteTest extends TestCase
 
     protected $article;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->article = $this->user->articles()->save(factory(\App\Article::class)->make());
+        $this->article = $this->user->articles()->save(\App\Article::factory()->make());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_article_favorite_properties_accordingly_when_favorited_and_unfavorited()
     {
         $response = $this->postJson("/api/articles/{$this->article->slug}/favorite", [], $this->headers);
@@ -42,7 +43,7 @@ class ArticleFavoriteTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_article_favorite_count_when_favorited_and_unfavorited()
     {
         $response = $this->getJson("/api/articles/{$this->article->slug}");
@@ -96,7 +97,7 @@ class ArticleFavoriteTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_unauthorized_error_when_trying_to_favorite_or_unfavorite_without_logging_in()
     {
         $response = $this->postJson("/api/articles/{$this->article->slug}/favorite");

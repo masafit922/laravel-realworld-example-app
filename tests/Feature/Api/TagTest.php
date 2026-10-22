@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,10 +10,10 @@ class TagTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_an_array_of_tags()
     {
-        $tags = factory(\App\Tag::class)->times(5)->create();
+        $tags = \App\Tag::factory()->count(5)->create();
 
         $response = $this->getJson('/api/tags');
 
@@ -22,7 +23,7 @@ class TagTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_empty_array_of_tags_when_there_are_none_in_database()
     {
         $response = $this->getJson('/api/tags');

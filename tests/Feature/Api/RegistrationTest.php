@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -9,7 +10,7 @@ class RegistrationTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_returns_user_with_token_on_valid_registration()
     {
         $data = [
@@ -35,7 +36,7 @@ class RegistrationTest extends TestCase
         $this->assertArrayHasKey('token', $response->json()['user'], 'Token not found');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_field_required_validation_errors_on_invalid_registration()
     {
         $data = [];
@@ -52,7 +53,7 @@ class RegistrationTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_appropriate_field_validation_errors_on_invalid_registration()
     {
         $data = [
@@ -75,7 +76,7 @@ class RegistrationTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_username_and_email_taken_validation_errors_when_using_duplicate_values_on_registration()
     {
         $data = [

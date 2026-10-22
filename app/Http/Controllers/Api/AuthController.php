@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Http\Requests\Api\LoginUser;
 use App\Http\Requests\Api\RegisterUser;

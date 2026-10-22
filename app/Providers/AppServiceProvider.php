@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Schema;
+use App\Http\Parsers\TokenAuthHeader;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Tymon\JWTAuth\Http\Parser\Parser;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,8 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(IdeHelperServiceProvider::class);
-        }
+        // Accept "Authorization: Token <jwt>" (RealWorld spec) as well as the default "Bearer".
+        $this->app->extend('tymon.jwt.parser', function (Parser $parser) {
+            return $parser->setChain(array_merge([new TokenAuthHeader], $parser->getChain()));
+        });
     }
 }
